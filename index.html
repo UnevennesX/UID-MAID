@@ -156,6 +156,8 @@
     <a href="https://unevennesx.github.io/UID-ONLY/" class="update-btn">Old Version</a>
     <div class="new-update" onclick="togglePatchNotes()">¡Nueva Actualización! - Version: 1.0.4</div>
     <h1>Extractor de UID y Maid</h1>
+    <label for="username">Nombre de Usuario:</label>
+    <input type="text" id="username" placeholder="Introduce tu nombre de usuario">
     <input type="text" id="userLink" placeholder="Pega tu enlace aquí">
     <button onclick="generateLink()">Generar y Copiar Enlace</button>
 
@@ -176,11 +178,12 @@
         <div id="notification" class="notification">¡Enlace copiado al portapapeles!</div>
     </div>
 
-    <script>
+<script>
 function generateLink() {
     const inputLink = document.getElementById('userLink');
     const outputDiv = document.getElementById('output');
     const notificationDiv = document.getElementById('notification');
+    const username = document.getElementById('username').value.trim();  // Obtener el username del usuario
 
     try {
         const url = new URL(inputLink.value.trim());
@@ -198,9 +201,13 @@ function generateLink() {
             throw new Error("Faltan parámetros esenciales en el enlace.");
         }
 
+        // Validar que se haya ingresado un nombre de usuario
+        if (!username) {
+            throw new Error("Por favor, ingresa tu nombre de usuario.");
+        }
+
         // Valores fijos
         const token = "966b75d5-780f-41a0-8bcd-09094b716259";
-        const username = "pagyryso79388f77";
         const visitor_id = "zRAGqYeY0eRPQ5jghtTs";
 
         // Generar el enlace con los valores fijos y extraídos
@@ -223,6 +230,7 @@ function generateLink() {
         // Limpiar los campos después de 20 segundos
         setTimeout(() => {
             inputLink.value = ""; // Limpiar el campo de entrada
+            document.getElementById('username').value = ""; // Limpiar el campo de username
             outputDiv.hidden = true; // Ocultar el resultado
         }, 20000); // 20 segundos
     } catch (error) {
@@ -237,8 +245,7 @@ function togglePatchNotes() {
     // Cambia la visibilidad del bloque, de 'none' a 'block' o viceversa
     patchNotes.style.display = patchNotes.style.display === 'block' ? 'none' : 'block';
 }
-
-    </script>
+</script>
 
 </body>
 </html>
