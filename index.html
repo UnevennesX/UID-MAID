@@ -135,19 +135,6 @@
             margin: 10px 0;
         }
 
-.update-btn {
-    background: #333333; /* Fondo oscuro */
-    color: #4caf50; /* Texto verde */
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-bottom: 20px;
-    text-decoration: none;
-    display: inline-block;
-    text-align: center;
-}
 
 
     </style>
@@ -156,8 +143,7 @@
 <div class="container">
     <a href="https://unevennesx.github.io/UID-ONLY/" class="update-btn">Solo UID</a>
     <div class="new-update" onclick="togglePatchNotes()">¡Nueva Actualización! - Version: 1.0.4</div>
-    <h1>Extractor de UID y Maid</h1>
-    <p>Pega el enlace original abajo para extraer el UID y el Maid y generar un nuevo enlace:</p>
+    <h1>Extractor de <button class="uid-btn">UID</button> y Maid</h1>
     <input type="text" id="userLink" placeholder="Pega tu enlace aquí">
     <button onclick="generateLink()">Generar y Copiar Enlace</button>
 
