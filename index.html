@@ -15,6 +15,7 @@
             height: 100vh;
             margin: 0;
             overflow: hidden;
+            flex-direction: column;
         }
 
         .container {
@@ -101,39 +102,29 @@
             text-align: center;
         }
 
-        .new-update {
-            font-size: 1.2rem;
-            color: #f1c40f; /* Un amarillo brillante */
-            font-weight: bold;
-            margin-bottom: 20px;
-            animation: highlight 1.5s ease-in-out infinite alternate;
-            cursor: pointer;
-        }
-
-        @keyframes highlight {
-            0% {
-                color: #f1c40f;
-            }
-            100% {
-                color: #e74c3c;
-            }
-        }
-
         .patch-notes {
-            display: none;
-            background: #444444;
-            padding: 15px;
             margin-top: 20px;
+            background: #555555;
+            color: #eaeaea;
+            padding: 15px;
             border-radius: 8px;
-            font-size: 14px;
-            color: #a1a1a1;
-            text-align: left;
-            border: 1px solid #666666;
+            display: none;
         }
 
-        .patch-notes p {
-            margin: 10px 0;
+        .update-btn {
+            background: #ff9800;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 20px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
         }
+
     </style>
 </head>
 <body>
