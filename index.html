@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Extractor de UID y Generador de Enlaces</title>
+    <title>UID</title>
     <style>
         body {
             font-family: 'Poppins', Arial, sans-serif;
@@ -100,52 +100,129 @@
             display: none;
             text-align: center;
         }
+
+        .new-update {
+            font-size: 1.2rem;
+            color: #f1c40f; /* Un amarillo brillante */
+            font-weight: bold;
+            margin-bottom: 20px;
+            animation: highlight 1.5s ease-in-out infinite alternate;
+            cursor: pointer;
+        }
+
+        @keyframes highlight {
+            0% {
+                color: #f1c40f;
+            }
+            100% {
+                color: #e74c3c;
+            }
+        }
+
+        .patch-notes {
+            display: none;
+            background: #444444;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #a1a1a1;
+            text-align: left;
+            border: 1px solid #666666;
+        }
+
+        .patch-notes p {
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Extractor de UID</h1>
-        <p>Pega el enlace original abajo para extraer el UID y generar un nuevo enlace:</p>
-        <input type="text" id="userLink" placeholder="Pega tu enlace aquí">
-        <button onclick="generateLink()">Generar y Copiar Enlace</button>
+<div class="container">
+    <div class="new-update" onclick="togglePatchNotes()">¡Nueva Actualización! - Version: 1.0.3</div>
+    <h1>Extractor de UID y Maid</h1>
+    <p>Pega el enlace original abajo para extraer el UID y el Maid y generar un nuevo enlace:</p>
+    <input type="text" id="userLink" placeholder="Pega tu enlace aquí">
+    <button onclick="generateLink()">Generar y Copiar Enlace</button>
+
+    <div id="output" class="output" hidden></div>
+    <div id="notification" class="notification">¡Enlace copiado al portapapeles!</div>
+
+    <div id="patchNotes" class="patch-notes">
+        <h3>Notas del Parche</h3>
+        <p><strong>1.0.3</strong> - Logica actualizada (Se Agrego el Maid para funcionar junto al UID</p>
+        <p><strong>1.0.2</strong> - Solucion al error Bitlabs Agregado: de informacion necesaria para el enlace generado.</p>
+        <p><strong>1.0.1</strong> - Mejoras en la velocidad de generación de enlaces y optimización del UI.</p>
+        <p><strong>1.0.0</strong> - Corregido un bug de visualización en enlaces incorrectos.</p>
+    </div>
+</div>
 
         <div id="output" class="output" hidden></div>
         <div id="notification" class="notification">¡Enlace copiado al portapapeles!</div>
     </div>
 
     <script>
-        function generateLink() {
-            const inputLink = document.getElementById('userLink');
-            const outputDiv = document.getElementById('output');
-            const notificationDiv = document.getElementById('notification');
+function generateLink() {
+    const inputLink = document.getElementById('userLink');
+    const outputDiv = document.getElementById('output');
+    const notificationDiv = document.getElementById('notification');
 
-            const uidMatch = inputLink.value.match(/uid=([a-zA-Z0-9-]+)/);
+    try {
+        const url = new URL(inputLink.value.trim());
 
-            if (uidMatch && uidMatch[1]) {
-                const uid = uidMatch[1];
-                const generatedLink = `https://web.bitlabs.ai/?token=966b75d5-780f-41a0-8bcd-09094b716259&uid=${uid}`;
+        // Extraer los parámetros esenciales
+        const uid = url.searchParams.get("uid");
+        const maid = url.searchParams.get("did"); // 'did' del enlace original corresponde a 'maid' en el nuevo enlace
 
-                outputDiv.textContent = generatedLink;
-                outputDiv.hidden = false;
+        // Depuración: Mostrar los valores extraídos en la consola
+        console.log("Valores extraídos:");
+        console.log({ uid, maid });
 
-                navigator.clipboard.writeText(generatedLink).then(() => {
-                    notificationDiv.style.display = 'block';
-                    setTimeout(() => {
-                        notificationDiv.style.display = 'none';
-                    }, 3000);
-
-                    setTimeout(() => {
-                        inputLink.value = '';
-                        outputDiv.hidden = true;
-                    }, 20000); // Limpia los datos tras 20 segundos
-                }).catch(err => {
-                    console.error('Error al copiar: ', err);
-                });
-            } else {
-                outputDiv.textContent = "Enlace inválido. Asegúrate de que contenga un parámetro 'uid'.";
-                outputDiv.hidden = false;
-            }
+        // Validar que los parámetros esenciales estén presentes
+        if (!uid || !maid) {
+            throw new Error("Faltan parámetros esenciales en el enlace.");
         }
+
+        // Valores fijos
+        const token = "966b75d5-780f-41a0-8bcd-09094b716259";
+        const username = "pagyryso79388f77";
+        const visitor_id = "zRAGqYeY0eRPQ5jghtTs";
+
+        // Generar el enlace con los valores fijos y extraídos
+        const generatedLink = `https://web.bitlabs.ai/?token=${token}&uid=${uid}&os=android&sdk=REACT&username=${username}&visitor_id=${visitor_id}&zbd_app_version=4.7.11&platform=android&display_mode=surveys&maid=${maid}`;
+
+        // Mostrar el enlace generado
+        outputDiv.textContent = generatedLink;
+        outputDiv.hidden = false;
+
+        // Copiar al portapapeles
+        navigator.clipboard.writeText(generatedLink).then(() => {
+            notificationDiv.style.display = 'block';
+            setTimeout(() => {
+                notificationDiv.style.display = 'none';
+            }, 10000);
+        }).catch(err => {
+            console.error("Error al copiar: ", err);
+        });
+
+        // Limpiar los campos después de 20 segundos
+        setTimeout(() => {
+            inputLink.value = ""; // Limpiar el campo de entrada
+            outputDiv.hidden = true; // Ocultar el resultado
+        }, 20000); // 20 segundos
+    } catch (error) {
+        outputDiv.textContent = `Error: ${error.message}`;
+        outputDiv.hidden = false;
+    }
+}
+
+function togglePatchNotes() {
+    const patchNotes = document.getElementById('patchNotes');
+    
+    // Cambia la visibilidad del bloque, de 'none' a 'block' o viceversa
+    patchNotes.style.display = patchNotes.style.display === 'block' ? 'none' : 'block';
+}
+
     </script>
+
 </body>
 </html>
